@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="antialiased">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MSentimental</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        heading: ['Inter', 'sans-serif'],
+                        body: ['Manrope', 'sans-serif'],
+                    },
+                    colors: {
+                        zinc: {
+                            850: '#1f1f22',
+                            900: '#18181b',
+                            950: '#09090b',
+                        },
+                        indigo: {
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+
+    <style>
+        body {
+            background-color: #09090b;
+            color: #e4e4e7;
+            font-family: 'Manrope', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+        }
+
+        .inner-glass {
+            background: rgba(255, 255, 255, 0.02);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .inner-glass:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(99, 102, 241, 0.3);
+        }
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--canvas);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent);
+            border-radius: 10px;
+            border: 3px solid var(--canvas);
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffffff;
+        }
+        * {
+            scrollbar-width: auto;
+            scrollbar-color: var(--accent) var(--canvas);
+        }
+        .scroll-container::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scroll-container::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .blur-in {
+            opacity: 0;
+            filter: blur(10px);
+            transform: translateY(20px);
+        }
+    </style>
+</head>
+<body class="flex flex-col md:flex-row h-full w-full relative selection:bg-indigo-500/30 selection:text-indigo-200">
+
+    <div class="fixed inset-0 pointer-events-none z-[-1]">
+        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px] animate-blob"></div>
+        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px] animate-blob" style="animation-delay: 2s"></div>
+        <div class="absolute top-[40%] left-[40%] w-[300px] h-[300px] bg-blue-600/10 rounded-full blur-[80px] animate-blob" style="animation-delay: 4s"></div>
+        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+    </div>
+
+    <aside class="w-full md:w-[340px] lg:w-[380px] flex flex-col justify-between p-8 border-b md:border-b-0 md:border-r border-white/5 bg-zinc-900/30 backdrop-blur-sm z-20">
+        
+        <div class="flex flex-col items-start gap-8 mt-4 md:mt-12">
+            <div class="relative w-24 h-24 blur-in group">
+                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500"></div>
+                <img src="https://strike-bot.pages.dev/7d4fbe61036e8a89aa29be1eaef51ff1.png" alt="Avatar" class="relative w-full h-full rounded-full border border-white/10 shadow-2xl bg-zinc-900 object-cover">
+            </div>
+
+            <div class="space-y-3 blur-in">
+                <h1 class="font-heading text-4xl font-normal tracking-tight text-white">
+                    MSentimental
+                </h1>
+                <p class="font-body text-base text-zinc-400 font-light leading-relaxed">
+                    Building random Discord bots. <br>
+                    <span class="text-indigo-400">Full Stack & Bot Developer</span> focused on functionality and UI.
+                </p>
+            </div>
+
+            <div class="flex gap-3 blur-in">
+                <a href="https://discord.com/users/1346683368783478976" target="_blank" class="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-zinc-950 font-heading font-medium text-sm hover:bg-zinc-200 transition-colors">
+                    <span>Contact</span>
+                    <iconify-icon icon="solar:arrow-right-linear" class="group-hover:translate-x-1 transition-transform"></iconify-icon>
+                </a>
+            </div>
+        </div>
+
+        <div class="hidden md:block blur-in pb-4">
+            <div class="flex items-center gap-3 mb-4">
+                <div class="flex -space-x-2">
+                    <div class="w-7 h-7 rounded-full border border-zinc-900 bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">Js</div>
+                    <div class="w-7 h-7 rounded-full border border-zinc-900 bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">Tw</div>
+                    <div class="w-7 h-7 rounded-full border border-zinc-900 bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">No</div>
+                </div>
+                <span class="text-xs text-zinc-500 font-medium">Top Stack</span>
+            </div>
+            <p class="text-[10px] text-zinc-600 uppercase tracking-widest">© 2026 MSentimental.</p>
+        </div>
+    </aside>
+
+    	<main class="flex-1 relative h-screen bg-zinc-950/20" style="overflow: scroll; overflow-x: hidden;">
+        
+        <div class="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-transparent z-10 pointer-events-none"></div>
+
+        <div class="overflow-y-auto scroll-container p-6 md:p-16 pb-32">
+            
+            <div class="h-8 md:h-12"></div>
+
+            <section class="mb-20 max-w-4xl">
+                <div class="flex items-center gap-3 mb-8 blur-in">
+                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
+                    <h2 class="font-heading text-sm uppercase tracking-widest text-zinc-500 font-medium">Projects</h2>
+                </div>
+
+                <a href="https://strike-bot.pages.dev" target="_blank" class="block group blur-in">
+                    <div class="inner-glass rounded-2xl p-1.5 transition-all duration-500 hover:scale-[1.01]">
+                        <div class="relative w-full h-64 md:h-80 overflow-hidden rounded-xl bg-zinc-900 border border-white/5">
+                            <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
+                            
+                            <img src="https://strike-bot.pages.dev/strike_background.jpg" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-all duration-700 ease-out" alt="Strike Background">
+                            
+                            <div class="absolute bottom-4 left-4 z-20 flex flex-wrap gap-2">
+                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">HTML</span>
+                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">CSS</span>
+                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">JS</span>
+                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">Node.js</span>
+                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">Tailwind</span>
+                            </div>
+                        </div>
+
+                        <div class="p-6 md:p-8 flex justify-between items-start gap-4">
+                            <div>
+                                <h3 class="font-heading text-2xl md:text-3xl text-white font-medium mb-3 group-hover:text-indigo-400 transition-colors tracking-tight">Strike</h3>
+                                <p class="font-body text-base text-zinc-400 max-w-xl leading-relaxed">A discord moderation and multipurpose bot for all your needs.</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 group-hover:bg-white group-hover:text-black transition-all shrink-0">
+                                <iconify-icon icon="solar:arrow-right-up-linear" width="20"></iconify-icon>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </section>
+
+            <section class="mb-20 max-w-4xl">
+                <div class="flex items-center gap-3 mb-8 blur-in">
+                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    <h2 class="font-heading text-sm uppercase tracking-widest text-zinc-500 font-medium">Global Stack</h2>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4 blur-in">
+                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
+                        <iconify-icon icon="logos:html-5" width="24"></iconify-icon>
+                        <span class="text-sm font-medium text-zinc-300">HTML</span>
+                    </div>
+                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
+                        <iconify-icon icon="logos:css-3" width="24"></iconify-icon>
+                        <span class="text-sm font-medium text-zinc-300">CSS</span>
+                    </div>
+                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
+                        <iconify-icon icon="logos:javascript" width="24"></iconify-icon>
+                        <span class="text-sm font-medium text-zinc-300">JavaScript</span>
+                    </div>
+                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
+                        <iconify-icon icon="logos:tailwindcss-icon" width="24"></iconify-icon>
+                        <span class="text-sm font-medium text-zinc-300">Tailwind</span>
+                    </div>
+                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
+                        <iconify-icon icon="logos:nodejs-icon" width="24"></iconify-icon>
+                        <span class="text-sm font-medium text-zinc-300">Node.js</span>
+                    </div>
+                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
+                        <iconify-icon icon="simple-icons:googlegemini" width="20" style="color: #4285F4;"></iconify-icon>
+                        <span class="text-sm font-medium text-zinc-300">Gemini (Yes, Gemini)</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="max-w-4xl pb-16">
+                <div class="flex items-center gap-3 mb-8 blur-in">
+                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
+                    <h2 class="font-heading text-sm uppercase tracking-widest text-zinc-500 font-medium">Experience</h2>
+                </div>
+
+                <div class="space-y-4 blur-in">
+                    <div class="inner-glass p-6 rounded-xl border-l-2 border-indigo-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="text-white text-lg font-medium font-heading">Discord Bot Developer</h4>
+                            <p class="text-sm text-zinc-400 mt-1">Specialized in Discord.js & Automation</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-full">Current</span>
+                        </div>
+                    </div>
+
+                    <div class="inner-glass p-6 rounded-xl border-l-2 border-zinc-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div>
+                            <h4 class="text-zinc-300 text-lg font-medium font-heading">Frontend and Backend Developer</h4>
+                            <p class="text-sm text-zinc-500 mt-1">Full Stack Applications • Web Systems</p>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-zinc-500 bg-white/5 px-3 py-1.5 rounded-full">2025 — Present</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div class="pt-12 border-t border-white/5 md:hidden text-center blur-in">
+                 <p class="text-[10px] text-zinc-600 uppercase tracking-widest">© 2026 MSentimental.</p>
+            </div>
+        </div>
+        
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent z-10 pointer-events-none" style="bottom: 0; position: sticky;"></div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            gsap.to('.blur-in', {
+                opacity: 1,
+                filter: 'blur(0px)',
+                y: 0,
+                duration: 0.8,
+                stagger: 0.1,
+                ease: 'power3.out'
+            });
+
+            const cards = document.querySelectorAll('.inner-glass');
+            cards.forEach(card => {
+                card.addEventListener('mouseenter', () => {
+                    gsap.to(card, {
+                        borderColor: 'rgba(99, 102, 241, 0.4)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                        duration: 0.3
+                    });
+                });
+                card.addEventListener('mouseleave', () => {
+                    gsap.to(card, {
+                        borderColor: 'rgba(255, 255, 255, 0.05)',
+                        backgroundColor: 'rgba(255, 255, 255, 0.02)',
+                        duration: 0.3
+                    });
+                });
+            });
+        });
+    </script>
+</body>
+</html>
