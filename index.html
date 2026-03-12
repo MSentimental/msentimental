@@ -1,300 +1,361 @@
 <!DOCTYPE html>
-<html lang="en" class="antialiased">
+<html lang="en" class="antialiased scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MSentimental</title>
+    <title>MSentimental | Portfolio</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="icon" href="https://strike-bot.pages.dev/strike.jpg">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="icon" href="https://cdn.discordapp.com/avatars/1346683368783478976/7d4fbe61036e8a89aa29be1eaef51ff1.png">
     <link rel="stylesheet" href="https://unpkg.com/lenis@1.1.13/dist/lenis.css">
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        heading: ['Inter', 'sans-serif'],
-                        body: ['Manrope', 'sans-serif'],
+                        sans: ['Manrope', 'sans-serif'],
+                        mono: ['ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
                     },
                     colors: {
-                        zinc: {
-                            850: '#1f1f22',
-                            900: '#18181b',
-                            950: '#09090b',
-                        },
-                        indigo: {
-                            500: '#6366f1',
-                            600: '#4f46e5',
-                        }
-                    },
-                    animation: {
-                        'blob': 'blob 10s infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        }
+                        background: '#fcfcfc',
+                        foreground: '#09090b',
+                        muted: '#64748b',
+                        border: 'rgba(0, 0, 0, 0.06)',
+                        surface: 'rgba(0, 0, 0, 0.02)',
+                        surfaceHover: 'rgba(0, 0, 0, 0.04)',
                     }
                 }
             }
         }
     </script>
+    
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
 
     <style>
         body {
-            background-color: #09090b;
-            color: #e4e4e7;
-            font-family: 'Manrope', sans-serif;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+            background-color: var(--background);
+            color: var(--foreground);
         }
 
-        .inner-glass {
-            background: rgba(255, 255, 255, 0.02);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            opacity: 0.03;
+            pointer-events: none;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
         }
-        
-        .inner-glass:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(99, 102, 241, 0.3);
-        }
+
         ::-webkit-scrollbar {
-            width: 10px;
-            height: 10px;
+            width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: var(--canvas);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent);
-            border-radius: 10px;
-            border: 3px solid var(--canvas);
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #ffffff;
-        }
-        * {
-            scrollbar-width: auto;
-            scrollbar-color: var(--accent) var(--canvas);
-        }
-        .scroll-container::-webkit-scrollbar {
-            width: 4px;
-        }
-        .scroll-container::-webkit-scrollbar-track {
             background: transparent;
         }
-        .scroll-container::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
+        ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 4px;
         }
-
-        .blur-in {
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+        
+        .fade-up {
             opacity: 0;
-            filter: blur(10px);
-            transform: translateY(20px);
+            visibility: hidden;
         }
     </style>
 </head>
-<body class="flex flex-col md:flex-row h-full w-full relative selection:bg-indigo-500/30 selection:text-indigo-200">
-
-    <div class="fixed inset-0 pointer-events-none z-[-1]">
-        <div class="absolute top-[-10%] left-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[100px] animate-blob"></div>
-        <div class="absolute bottom-[-10%] right-[-10%] w-[500px] h-[500px] bg-purple-600/10 rounded-full blur-[100px] animate-blob" style="animation-delay: 2s"></div>
-        <div class="absolute top-[40%] left-[40%] w-[300px] h-[300px] bg-blue-600/10 rounded-full blur-[80px] animate-blob" style="animation-delay: 4s"></div>
-        <div class="absolute inset-0 opacity-[0.03]" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+<body class="relative min-h-screen selection:bg-black/10 selection:text-black flex justify-center">
+   <div id="loader" class="fixed inset-0 z-[300] flex items-center justify-center overflow-hidden pointer-events-none">
+    <div id="loader-top" class="absolute top-0 left-0 w-full h-1/2 bg-[#fcfcfc] z-10"></div>
+    <div id="loader-bottom" class="absolute bottom-0 left-0 w-full h-1/2 bg-[#fcfcfc] z-10"></div>
+    
+    <div class="relative z-20 flex flex-col items-center">
+        <div id="loader-text" class="text-[10px] font-bold tracking-[0.4em] uppercase text-foreground mb-4 opacity-0 scale-95 flex align-center gap-2">
+                    <img 
+                        src="https://strike-bot.pages.dev/7d4fbe61036e8a89aa29be1eaef51ff1.png" 
+                        alt="MSentimental" 
+                        class="size-4 rounded-full transition-all duration-500 border border-border object-cover bg-white shadow-sm"
+                    >
+            MSentimental
+        </div>
+        <div class="w-32 h-[1px] bg-black/5 relative overflow-hidden">
+            <div id="loader-bar" class="absolute inset-0 bg-foreground origin-left scale-x-0"></div>
+        </div>
     </div>
+</div> 
+    <div class="noise-overlay"></div>
 
-    <aside class="w-full md:w-[340px] lg:w-[380px] flex flex-col justify-between p-8 border-b md:border-b-0 md:border-r border-white/5 bg-zinc-900/30 backdrop-blur-sm z-20">
+<header id="main-header" class="fixed top-0 left-0 right-0 z-[100] flex justify-center transition-all duration-500 ease-in-out py-4">
+    <div id="header-container" class="w-full max-w-6xl px-6 flex items-center justify-between transition-all duration-500">
         
-        <div class="flex flex-col items-start gap-8 mt-4 md:mt-12">
-            <div class="relative w-24 h-24 blur-in group">
-                <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full opacity-20 group-hover:opacity-40 blur-xl transition-opacity duration-500"></div>
-                <img src="https://strike-bot.pages.dev/7d4fbe61036e8a89aa29be1eaef51ff1.png" alt="Avatar" class="relative w-full h-full rounded-full border border-white/10 shadow-2xl bg-zinc-900 object-cover">
-            </div>
+        <div class="flex items-center gap-2">
 
-            <div class="space-y-3 blur-in">
-                <h1 class="font-heading text-4xl font-normal tracking-tight text-white">
-                    MSentimental
-                </h1>
-                <p class="font-body text-base text-zinc-400 font-light leading-relaxed">
-                    Building random Discord bots. <br>
-                    <span class="text-indigo-400">Full Stack & Bot Developer</span> focused on functionality and UI.
-                </p>
-            </div>
-
-            <div class="flex gap-3 blur-in">
-                <a href="https://discord.com/users/1346683368783478976" target="_blank" class="group flex items-center gap-2 px-5 py-2.5 rounded-full bg-white text-zinc-950 font-heading font-medium text-sm hover:bg-zinc-200 transition-colors">
-                    <span>Contact</span>
-                    <iconify-icon icon="solar:arrow-right-linear" class="group-hover:translate-x-1 transition-transform"></iconify-icon>
-                </a>
-            </div>
+            <span class="text-sm font-bold tracking-tighter text-foreground">MSentimental</span>
         </div>
 
-        <div class="hidden md:block blur-in pb-4">
-            <div class="flex items-center gap-3 mb-4">
-                <div class="flex -space-x-2">
-                    <div class="w-7 h-7 rounded-full border border-zinc-900 bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">Js</div>
-                    <div class="w-7 h-7 rounded-full border border-zinc-900 bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">Tw</div>
-                    <div class="w-7 h-7 rounded-full border border-zinc-900 bg-zinc-800 flex items-center justify-center text-[10px] text-zinc-400">No</div>
+        <div class="flex items-center gap-6">
+            <nav class="hidden md:flex items-center gap-6">
+                <a onclick="window.location.href='https://strike-bot.pages.dev/get-a-job'" class="cursor-pointer text-xs font-medium text-muted hover:text-foreground transition-colors">Work</a>
+                <a onclick="window.location.href='https://strike-bot.pages.dev/get-a-job'" class="cursor-pointer text-xs font-medium text-muted hover:text-foreground transition-colors">Experience</a>
+            </nav>
+            <a href="https://discord.com/users/1346683368783478976" target="_blank" class="px-4 py-2 rounded-full bg-foreground text-background text-xs font-semibold hover:opacity-90 transition-opacity shadow-sm">
+                Get in touch
+            </a>
+        </div>
+        
+    </div>
+</header>
+
+    <div class="w-full max-w-6xl px-6 md:px-12 lg:px-24 py-12 md:py-24 flex flex-col lg:flex-row gap-12 lg:gap-24 mt-16">
+        
+        <aside class="w-full lg:w-[280px] shrink-0">
+            <div class="lg:sticky lg:top-24 flex flex-col gap-8 fade-up">
+                
+                <div class="space-y-5">
+                    <img 
+                        src="https://strike-bot.pages.dev/7d4fbe61036e8a89aa29be1eaef51ff1.png" 
+                        alt="MSentimental" 
+                        class="size-16 rounded-full transition-all duration-500 border border-border object-cover bg-white shadow-sm"
+                    >
+                    
+                    <div>
+                        <h1 class="text-2xl font-semibold tracking-tight text-foreground">MSentimental</h1>
+                        <h2 class="text-[15px] font-medium text-muted mt-1">Full Stack & Bot Developer</h2>
+                    </div>
+
+                    <p class="text-sm text-muted leading-relaxed">
+                        Building random things such as websites and Discord bots :D
+                    </p>
                 </div>
-                <span class="text-xs text-zinc-500 font-medium">Top Stack</span>
+
+                <nav class="flex flex-col gap-2">
+                    <a href="https://discord.com/users/1346683368783478976" target="_blank" class="group flex items-center justify-between px-3 py-2 -ml-3 rounded-lg hover:bg-surface transition-colors text-sm font-medium text-muted hover:text-foreground">
+                        <div class="flex items-center gap-3">
+                            <iconify-icon icon="ic:baseline-discord" class="text-lg"></iconify-icon>
+                            Contact me
+                        </div>
+                        <iconify-icon icon="lucide:arrow-up-right" class="text-neutral-400 group-hover:text-foreground transition-colors"></iconify-icon>
+                    </a>
+                    <a href="https://github.com/msentimental" target="_blank" class="group flex items-center justify-between px-3 py-2 -ml-3 rounded-lg hover:bg-surface transition-colors text-sm font-medium text-muted hover:text-foreground">
+                        <div class="flex items-center gap-3">
+                            <iconify-icon icon="lucide:github" class="text-lg"></iconify-icon>
+                            GitHub
+                        </div>
+                        <iconify-icon icon="lucide:arrow-up-right" class="text-neutral-400 group-hover:text-foreground transition-colors"></iconify-icon>
+                    </a>
+                </nav>
+
             </div>
-            <p class="text-[10px] text-zinc-600 uppercase tracking-widest">© 2026 MSentimental.</p>
-        </div>
-    </aside>
+        </aside>
 
-    	<main class="flex-1 relative h-screen bg-zinc-950/20" style="overflow: scroll; overflow-x: hidden;">
-        
-        <div class="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-zinc-950 via-zinc-950/80 to-transparent z-10 pointer-events-none"></div>
-
-        <div class="overflow-y-auto scroll-container p-6 md:p-16 pb-32">
+        <main class="flex-1 flex flex-col gap-24 pb-24">
             
-            <div class="h-8 md:h-12"></div>
-
-            <section class="mb-20 max-w-4xl">
-                <div class="flex items-center gap-3 mb-8 blur-in">
-                    <span class="w-1.5 h-1.5 rounded-full bg-indigo-500"></span>
-                    <h2 class="font-heading text-sm uppercase tracking-widest text-zinc-500 font-medium">Projects</h2>
-                </div>
-
-                <a href="https://strike-bot.pages.dev" target="_blank" class="block group blur-in">
-                    <div class="inner-glass rounded-2xl p-1.5 transition-all duration-500 hover:scale-[1.01]">
-                        <div class="relative w-full h-64 md:h-80 overflow-hidden rounded-xl bg-zinc-900 border border-white/5">
-                            <div class="absolute inset-0 bg-gradient-to-b from-indigo-500/10 to-purple-900/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10"></div>
-                            
-                            <img src="https://strike-bot.pages.dev/strike_background.jpg" class="w-full h-full object-cover opacity-50 group-hover:opacity-70 transition-all duration-700 ease-out" alt="Strike Background">
-                            
-                            <div class="absolute bottom-4 left-4 z-20 flex flex-wrap gap-2">
-                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">HTML</span>
-                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">CSS</span>
-                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">JS</span>
-                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">Node.js</span>
-                                <span class="px-2.5 py-1 rounded-md bg-black/60 backdrop-blur-md border border-white/10 text-[11px] text-zinc-300 font-medium tracking-wide">Tailwind</span>
+            <section class="space-y-8 fade-up">
+                <h3 class="text-sm font-semibold text-foreground">Project(s)</h3>
+                
+                <a href="https://strike-bot.pages.dev" target="_blank" class="group block">
+                    <article class="flex flex-col rounded-2xl border border-border bg-white overflow-hidden transition-all duration-300">
+                        <div class="relative w-full h-56 md:h-64 border-b border-border overflow-hidden bg-neutral-100">
+                            <img 
+                                src="https://strike-bot.pages.dev/strike_background.jpg" 
+                                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-[1.02] transition-all duration-700 ease-out" 
+                                alt="Strike Background"
+                            >
+                            <div class="absolute inset-0 shadow-[inset_0_0_40px_rgba(0,0,0,0.05)] pointer-events-none"></div>
+                        </div>
+                        
+                        <div class="p-6 md:p-8 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
+                            <div class="space-y-2">
+                                <div class="flex items-center gap-3">
+                                    <h4 class="text-lg font-semibold text-foreground tracking-tight">Strike</h4>
+                                    <span class="px-2 py-0.5 rounded-full border border-white-500/20 bg-emerald-500/10 text-[10px] text-white-700 font-medium">Unreleased</span>
+                                </div>
+                                <p class="text-sm text-muted leading-relaxed max-w-md">
+                                    A high-performance Discord moderation and multipurpose bot. Features a custom web dashboard, intricate logging, and advanced automation.
+                                </p>
+                            </div>
+                            <div class="shrink-0 flex items-center justify-center size-8 rounded-full border border-border text-muted group-hover:bg-black group-hover:text-white group-hover:border-black transition-all">
+                                <iconify-icon icon="lucide:arrow-up-right" class="text-sm"></iconify-icon>
                             </div>
                         </div>
-
-                        <div class="p-6 md:p-8 flex justify-between items-start gap-4">
-                            <div>
-                                <h3 class="font-heading text-2xl md:text-3xl text-white font-medium mb-3 group-hover:text-indigo-400 transition-colors tracking-tight">Strike</h3>
-                                <p class="font-body text-base text-zinc-400 max-w-xl leading-relaxed">A discord moderation and multipurpose bot for all your needs.</p>
-                            </div>
-                            <div class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-zinc-500 group-hover:bg-white group-hover:text-black transition-all shrink-0">
-                                <iconify-icon icon="solar:arrow-right-up-linear" width="20"></iconify-icon>
-                            </div>
-                        </div>
-                    </div>
+                    </article>
                 </a>
             </section>
 
-            <section class="mb-20 max-w-4xl">
-                <div class="flex items-center gap-3 mb-8 blur-in">
-                    <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
-                    <h2 class="font-heading text-sm uppercase tracking-widest text-zinc-500 font-medium">Global Stack</h2>
-                </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4 blur-in">
-                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
-                        <iconify-icon icon="logos:html-5" width="24"></iconify-icon>
-                        <span class="text-sm font-medium text-zinc-300">HTML</span>
-                    </div>
-                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
-                        <iconify-icon icon="logos:css-3" width="24"></iconify-icon>
-                        <span class="text-sm font-medium text-zinc-300">CSS</span>
-                    </div>
-                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
-                        <iconify-icon icon="logos:javascript" width="24"></iconify-icon>
-                        <span class="text-sm font-medium text-zinc-300">JavaScript</span>
-                    </div>
-                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
-                        <iconify-icon icon="logos:tailwindcss-icon" width="24"></iconify-icon>
-                        <span class="text-sm font-medium text-zinc-300">Tailwind</span>
-                    </div>
-                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
-                        <iconify-icon icon="logos:nodejs-icon" width="24"></iconify-icon>
-                        <span class="text-sm font-medium text-zinc-300">Node.js</span>
-                    </div>
-                    <div class="inner-glass p-4 rounded-xl flex items-center gap-4 hover:bg-white/5 transition-colors">
-                        <iconify-icon icon="simple-icons:googlegemini" width="20" style="color: #4285F4;"></iconify-icon>
-                        <span class="text-sm font-medium text-zinc-300">Gemini (Yes, Gemini)</span>
-                    </div>
-                </div>
-            </section>
-
-            <section class="max-w-4xl pb-16">
-                <div class="flex items-center gap-3 mb-8 blur-in">
-                    <span class="w-1.5 h-1.5 rounded-full bg-zinc-500"></span>
-                    <h2 class="font-heading text-sm uppercase tracking-widest text-zinc-500 font-medium">Experience</h2>
-                </div>
-
-                <div class="space-y-4 blur-in">
-                    <div class="inner-glass p-6 rounded-xl border-l-2 border-indigo-500 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div>
-                            <h4 class="text-white text-lg font-medium font-heading">Discord Bot Developer</h4>
-                            <p class="text-sm text-zinc-400 mt-1">Specialized in Discord.js & Automation</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-indigo-300 bg-indigo-500/10 border border-indigo-500/20 px-3 py-1.5 rounded-full">Current</span>
+            <section class="space-y-8 fade-up">
+                <h3 class="text-sm font-semibold tracking-tight text-foreground">Experience</h3>
+                
+                <div class="flex flex-col">
+                    <div class="group flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8 py-5 border-t border-border transition-opacity">
+                        <span class="text-sm text-muted shrink-0 md:w-32">2025 Sep — Pres.</span>
+                        <div class="space-y-1">
+                            <h4 class="text-sm font-medium text-foreground">Full Stack Developer</h4>
+                            <p class="text-sm text-muted leading-relaxed">Designing and tinkering with websites and started working on Strike.</p>
                         </div>
                     </div>
-
-                    <div class="inner-glass p-6 rounded-xl border-l-2 border-zinc-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div>
-                            <h4 class="text-zinc-300 text-lg font-medium font-heading">Frontend and Backend Developer</h4>
-                            <p class="text-sm text-zinc-500 mt-1">Full Stack Applications • Web Systems</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-zinc-500 bg-white/5 px-3 py-1.5 rounded-full">2025 — Present</span>
+                    
+                    <div class="group flex flex-col md:flex-row md:items-baseline gap-2 md:gap-8 py-5 border-t border-border transition-opacity">
+                        <span class="text-sm text-muted shrink-0 md:w-32">Mar 2025 - Jun 2025</span>
+                        <div class="space-y-1">
+                            <h4 class="text-sm font-medium text-foreground">Just Starting Out</h4>
+                            <p class="text-sm text-muted leading-relaxed">Made my first website and was proud of myself. Now I look back and criticize my own UI.</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <div class="pt-12 border-t border-white/5 md:hidden text-center blur-in">
-                 <p class="text-[10px] text-zinc-600 uppercase tracking-widest">© 2026 MSentimental.</p>
-            </div>
-        </div>
-        
-        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-zinc-950 via-zinc-950/80 to-transparent z-10 pointer-events-none" style="bottom: 0; position: sticky;"></div>
-    </main>
+            <section class="space-y-8 fade-up">
+                <h3 class="text-sm font-semibold tracking-tight text-foreground">Technologies</h3>
+                
+                <div class="flex flex-wrap gap-2">
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-white text-xs font-medium text-neutral-600 shadow-sm hover:text-black transition-colors cursor-default">
+                        <iconify-icon icon="logos:javascript" class="text-sm grayscale opacity-70"></iconify-icon> JavaScript
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-white text-xs font-medium text-neutral-600 shadow-sm hover:text-black transition-colors cursor-default">
+                        <iconify-icon icon="logos:nodejs-icon" class="text-sm grayscale opacity-70"></iconify-icon> Node.js
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-white text-xs font-medium text-neutral-600 shadow-sm hover:text-black transition-colors cursor-default">
+                        <iconify-icon icon="logos:tailwindcss-icon" class="text-sm grayscale opacity-70"></iconify-icon> Tailwind CSS
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-white text-xs font-medium text-neutral-600 shadow-sm hover:text-black transition-colors cursor-default">
+                        <iconify-icon icon="logos:html-5" class="text-sm grayscale opacity-70"></iconify-icon> HTML & CSS
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1.5 rounded-md border border-border bg-white text-xs font-medium text-neutral-600 shadow-sm hover:text-black transition-colors cursor-default">
+                        <iconify-icon icon="simple-icons:googlegemini" class="text-sm opacity-70"></iconify-icon> Gemini AI
+                    </div>
+                </div>
+            </section>
+
+            <footer class="pt-8 border-t border-border flex justify-between items-center text-xs text-muted fade-up">
+                <span>© 2026 MSentimental.</span>
+<span onclick="window.location.href='https://strike-bot.pages.dev/get-a-job'" lass="flex items-center gap-1.5" style="
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+">
+                    <span class="relative flex h-2 w-2">
+                        <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-30"></span>
+                        <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                    </span>
+                    Available for work
+                </span>
+            </footer>
+
+        </main>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            gsap.to('.blur-in', {
-                opacity: 1,
-                filter: 'blur(0px)',
+            gsap.to('.fade-up', {
+                autoAlpha: 1,
                 y: 0,
+                opacity: 1,
                 duration: 0.8,
-                stagger: 0.1,
-                ease: 'power3.out'
+                stagger: 0.15,
+                ease: 'power3.out',
+                delay: 0.1
             });
 
-            const cards = document.querySelectorAll('.inner-glass');
-            cards.forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    gsap.to(card, {
-                        borderColor: 'rgba(99, 102, 241, 0.4)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                        duration: 0.3
-                    });
+            window.addEventListener('load', () => { window.scrollTo(0, 0); });
+            
+            const techPills = document.querySelectorAll('.bg-white');
+            techPills.forEach(pill => {
+                const icon = pill.querySelector('iconify-icon');
+                pill.addEventListener('mouseenter', () => {
+                    if(icon) icon.classList.remove('grayscale', 'opacity-70');
                 });
-                card.addEventListener('mouseleave', () => {
-                    gsap.to(card, {
-                        borderColor: 'rgba(255, 255, 255, 0.05)',
-                        backgroundColor: 'rgba(255, 255, 255, 0.02)',
-                        duration: 0.3
-                    });
+                pill.addEventListener('mouseleave', () => {
+                    if(icon) icon.classList.add('grayscale', 'opacity-70');
                 });
             });
+
+            const header = document.getElementById('main-header');
+            const headerContainer = document.getElementById('header-container');
+
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    header.classList.remove('py-4');
+                    header.classList.add('py-2', 'bg-white/80', 'backdrop-blur-md', 'border-b', 'border-border');
+                    headerContainer.classList.remove('max-w-6xl');
+                    headerContainer.classList.add('max-w-full', 'px-8');
+                } else {
+                    header.classList.add('py-4');
+                    header.classList.remove('py-2', 'bg-white/80', 'backdrop-blur-md', 'border-b', 'border-border');
+                    headerContainer.classList.add('max-w-6xl');
+                    headerContainer.classList.remove('max-w-full', 'px-8');
+                }
+            });
         });
+document.addEventListener('DOMContentLoaded', () => {
+    const tl = gsap.timeline({
+        onComplete: () => {
+            document.getElementById('loader').remove();
+        }
+    });
+
+    gsap.set('.fade-up', { opacity: 0, y: 20 });
+
+    tl.to('#loader-bar', { 
+        scaleX: 1, 
+        duration: 0.4, 
+        ease: "expo.inOut" 
+    })
+    .to('#loader-text', { 
+        opacity: 1, 
+        scale: 1, 
+        duration: 0.3, 
+        ease: "power2.out" 
+    }, "-=0.2")
+    .to('#loader-text', { 
+        opacity: 0, 
+        scale: 1.05, 
+        duration: 0.2, 
+        ease: "power2.in" 
+    }, "+=0.1")
+    .to('#loader-top', { 
+        yPercent: -100, 
+        duration: 0.6, 
+        ease: "expo.inOut" 
+    }, "-=0.1")
+    .to('#loader-bottom', { 
+        yPercent: 100, 
+        duration: 0.6, 
+        ease: "expo.inOut" 
+    }, "<")
+    .to('#loader-bar', { 
+        opacity: 0, 
+        duration: 0.2 
+    }, "-=0.5")
+
+    .to('.fade-up', {
+        autoAlpha: 1,
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: 'power3.out'
+    }, "-=0.4");
+});
     </script>
+<script>
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        smoothWheel: true
+    });
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+</script>
 </body>
 </html>
