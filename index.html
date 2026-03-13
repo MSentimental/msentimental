@@ -211,15 +211,15 @@
 <section class="space-y-8 fade-up">
     <div class="grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-border bg-white overflow-hidden shadow-sm">
 
-        <div class="group p-6 flex flex-col justify-between transition-colors">
-            <iconify-icon icon="lucide:bot" class="text-lg text-muted transition-colors"></iconify-icon>
+        <div class="p-6 flex flex-col justify-between">
+            <iconify-icon icon="lucide:bot" class="text-lg text-muted transform-none" style="transform: none !important;"></iconify-icon>
             <div class="mt-4">
                 <p class="text-2xl font-semibold text-foreground">3</p>
                 <p class="text-xs text-muted mt-1">Discord Bots Created</p>
             </div>
         </div>
 
-        <div class="group p-6 flex flex-col justify-between border-t sm:border-t-0 sm:border-l border-border transition-colors">
+        <div class="p-6 flex flex-col justify-between border-t sm:border-t-0 sm:border-l border-border">
             <iconify-icon icon="lucide:clock" class="text-lg text-muted transition-colors"></iconify-icon>
             <div class="mt-4">
                 <p class="text-2xl font-semibold text-foreground">1+</p>
@@ -227,7 +227,7 @@
             </div>
         </div>
 
-        <div class="group p-6 flex flex-col justify-between border-t sm:border-t-0 sm:border-l border-border transition-colors">
+        <div class="p-6 flex flex-col justify-between border-t sm:border-t-0 sm:border-l border-border">
             <iconify-icon icon="lucide:git-commit" class="text-lg text-muted transition-colors"></iconify-icon>
             <div class="mt-4">
                 <p class="text-2xl font-semibold text-foreground">2500+</p>
@@ -491,7 +491,7 @@ animateBlob('#blob-1', 100, 50, 20);
 animateBlob('#blob-2', -80, 120, 25);
 animateBlob('#blob-3', 150, -60, 30);
             
-            const techPills = document.querySelectorAll('.bg-white');
+            const techPills = document.querySelectorAll('.flex-wrap .bg-white');
             techPills.forEach(pill => {
                 const icon = pill.querySelector('iconify-icon');
                 pill.addEventListener('mouseenter', () => {
