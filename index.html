@@ -52,7 +52,7 @@
         }
 
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 0px;
         }
         ::-webkit-scrollbar-track {
             background: transparent;
@@ -91,7 +91,8 @@
 }
     </style>
 </head>
-<body class="relative min-h-screen selection:bg-black/10 selection:text-black flex justify-center">
+<body class="bg-[#f2f2f2] p-1.5 md:p-2 h-screen overflow-hidden selection:bg-black/10 selection:text-black flex justify-center">
+<div id="app-frame" class="relative w-full h-full bg-background border border-border rounded-[16px] md:rounded-[24px] shadow-2xl overflow-y-auto overflow-x-hidden flex flex-col items-center">
 <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
     <div id="blob-1" class="absolute -top-[10%] -left-[10%] w-[500px] h-[500px] rounded-full bg-emerald-500/5 blur-[120px]"></div>
     <div id="blob-2" class="absolute top-[40%] -right-[10%] w-[400px] h-[400px] rounded-full bg-blue-500/5 blur-[100px]"></div>
@@ -117,7 +118,7 @@
 </div> 
     <div class="noise-overlay"></div>
 
-<header id="main-header" class="fixed top-0 left-0 w-full z-[100] py-4 transition-all duration-500">
+<header id="main-header" class="sticky top-0 left-0 w-full z-[100] py-4 transition-all duration-500">
     <div id="header-container" class="w-full max-w-6xl mx-auto flex items-center justify-between px-6 md:px-12 lg:px-24 transition-all duration-500">
         
         <a id="logo-link" class="text-sm font-bold tracking-tighter cursor-pointer">MSentimental</a>
@@ -175,7 +176,7 @@
                     </div>
 
                     <p class="text-sm text-muted leading-relaxed">
-                        Just a beginner dev that's building random things such as websites and Discord bots :D
+                        I build random things such as websites and Discord bots. Recently got into cryptography.
                     </p>
                 </div>
 
@@ -207,6 +208,28 @@
         </aside>
 
         <main class="flex-1 flex flex-col gap-24 pb-24">
+<div class="flex flex-col gap-8">
+<section class="space-y-2 fade-up">
+    
+    <div class="flex flex-col gap-1 mb-2">
+        <div class="text-2xl md:text-3xl font-medium tracking-tighter text-foreground flex items-center gap-2">
+            <span class="text-muted/70">A developer</span>
+            
+            <div class="relative h-[1.2em] overflow-hidden w-[160px] md:w-[200px]">
+                <div id="word-scroller" class="absolute top-0 left-0 flex flex-col w-full text-foreground">
+                    <span class="h-[1.2em] flex items-center">Portfolio.</span>
+                    <span class="h-[1.2em] flex items-center">Showcase.</span>
+                    <span class="h-[1.2em] flex items-center">Workspace.</span>
+                    <span class="h-[1.2em] flex items-center">Portfolio.</span> </div>
+            </div>
+            
+        </div>
+    </div>
+    
+    <div class="flex flex-wrap gap-2">
+        </div>
+    
+</section>
 
 <section class="space-y-8 fade-up">
     <div class="grid grid-cols-1 sm:grid-cols-3 rounded-2xl border border-border bg-white overflow-hidden shadow-sm">
@@ -237,6 +260,7 @@
 
     </div>
 </section>
+</div>
             
             <section class="space-y-8 fade-up">
                 <h3 class="text-sm font-semibold text-foreground">Main Project(s)</h3>
@@ -461,6 +485,7 @@ class="fixed bottom-6 right-6 z-[120] size-10 flex items-center justify-center r
     <iconify-icon icon="lucide:arrow-up" class="text-sm"></iconify-icon>
 
 </button>
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -502,24 +527,34 @@ animateBlob('#blob-3', 150, -60, 30);
                 });
             });
 
-            const header = document.getElementById('main-header');
-            const headerContainer = document.getElementById('header-container');
+const header = document.getElementById('main-header');
+const headerContainer = document.getElementById('header-container');
 
-            window.addEventListener('scroll', () => {
-                if (window.scrollY > 50) {
-                    header.classList.remove('py-4');
-                    header.classList.add('py-2', 'bg-white/80', 'backdrop-blur-md', 'border-b', 'border-border');
-                    headerContainer.classList.remove('max-w-6xl');
-                    headerContainer.classList.add('max-w-full', 'px-8');
-                } else {
-                    header.classList.add('py-4');
-                    header.classList.remove('py-2', 'bg-white/80', 'backdrop-blur-md', 'border-b', 'border-border');
-                    headerContainer.classList.add('max-w-6xl');
-                    headerContainer.classList.remove('max-w-full', 'px-8');
-                }
-            });
+lenis.on('scroll', (e) => {
+    if (e.scroll > 50) {
+        header.classList.add('py-2', 'bg-white/80', 'backdrop-blur-md', 'border-b', 'border-border');
+        header.classList.remove('py-4');
+        
+        headerContainer.classList.add('max-w-full', 'px-8');
+        headerContainer.classList.remove('max-w-6xl');
+    } else {
+        header.classList.add('py-4');
+        header.classList.remove('py-2', 'bg-white/80', 'backdrop-blur-md', 'border-b', 'border-border');
+        
+        headerContainer.classList.add('max-w-6xl');
+        headerContainer.classList.remove('max-w-full', 'px-8');
+    }
+});
         });
 document.addEventListener('DOMContentLoaded', () => {
+const tlScroller = gsap.timeline({ repeat: -1 });
+
+tlScroller
+    .to("#word-scroller", { yPercent: -25, duration: 0.6, ease: "expo.inOut", delay: 1.5 })
+    .to("#word-scroller", { yPercent: -50, duration: 0.6, ease: "expo.inOut", delay: 1.5 })
+    .to("#word-scroller", { yPercent: -75, duration: 0.6, ease: "expo.inOut", delay: 1.5 })
+    .set("#word-scroller", { yPercent: 0 });
+
     const tl = gsap.timeline({
         onComplete: () => {
             document.getElementById('loader').remove();
@@ -616,16 +651,21 @@ document.addEventListener('DOMContentLoaded', () => {
 });
     </script>
 <script>
-    const lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true
-    });
-    function raf(time) {
-        lenis.raf(time);
-        requestAnimationFrame(raf);
-    }
+const scrollContainer = document.getElementById('app-frame');
+
+const lenis = new Lenis({
+    wrapper: scrollContainer,
+    content: scrollContainer.firstElementChild, 
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothWheel: true
+});
+
+function raf(time) {
+    lenis.raf(time);
     requestAnimationFrame(raf);
+}
+requestAnimationFrame(raf);
 
 const scrollBtn = document.getElementById('scrollTopBtn');
 
